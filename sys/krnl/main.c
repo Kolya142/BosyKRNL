@@ -14,10 +14,9 @@ void _start() {
     #endif
     
     for(;;) {
-        for (uintmax_t i = 0; i < 256; ++i) {
+        for (uintarch_t i = 0; i < 256; ++i) {
 	    if (mods[i] && mods[i]->flags & MOD_FLAGS_CHAROUT && mods[i]->write) {
-		mods[i]->write(0, 1, "Hello!", 6);
-		break;
+		mods[i]->write(i, 1, "Hello!", 6);
 	    }
 	}
     }

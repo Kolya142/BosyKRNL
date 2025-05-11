@@ -9,9 +9,9 @@ static void vga_load(dev_t dev) {
     bg = 0x00;
 }
 
-static uintmax_t vga_write(dev_t dev, FS_RW_ARGS) {
+static uintarch_t vga_write(dev_t dev, FS_RW_ARGS) {
     char *cbuf = buf;
-    uintmax_t i;
+    uintarch_t i;
     for (i = 0; i < count; ++i) {
 	((short*)0xB8000)[c] = ((fg | (bg << 4)) << 8) | cbuf[i];
 	if (c >= 80*25) break;
@@ -20,7 +20,7 @@ static uintmax_t vga_write(dev_t dev, FS_RW_ARGS) {
     return i;
 }
 
-static uintmax_t vga_ioctl(dev_t dev, uintmax_t fd, uint32_t type, uintmax_t a, uintmax_t b, uintmax_t c, uintmax_t d) {
+static uintarch_t vga_ioctl(dev_t dev, uintarch_t fd, uint32_t type, uintarch_t a, uintarch_t b, uintarch_t c, uintarch_t d) {
     if (type == IO_CURSET) {
 	c = a;
 	return 0;
