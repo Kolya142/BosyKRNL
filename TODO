@@ -1,0 +1,14 @@
+'P' - in Progress
+'x' - finished
+
+[ ] replace emacs with my own code editor
+[ ] replace grub with a non-gpl boot loader
+[P] make BBB(Boot Binary Blob)
+[ ] self-host bosykrnl-based os
+[ ] ext2 fs
+[ ] aarch64, arm32, riscv64 and amd64 support
+[ ] POSIX-like user-land
+[ ] elf loader
+[ ] usb hid support
+[ ] pci support
+[ ] readable readme.md
