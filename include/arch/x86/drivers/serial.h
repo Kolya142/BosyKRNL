@@ -1,3 +1,4 @@
+#pragma once
 #include <dev/charout.h>
 
 extern mod_t serial1;

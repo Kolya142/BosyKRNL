@@ -26,6 +26,8 @@ for root, _, files in os.walk(proot):
         output = Path(proot) / "build" / (f + '.o')
         if f.endswith(".c"):
             tasks.append([*cc, str(source), "-o", str(output)])
+        elif f.endswith(".zxq"):
+            tasks.append(["bash", "-c", f"python3 ~/zxaqnop/compiler.py {source} > {output}.c && {' '.join(cc)} {output}.c -o {output}"])
         elif f.endswith(".s"):
             tasks.append(["nasm", "-f", f"elf{bits}", str(source), "-o", str(output)])
 

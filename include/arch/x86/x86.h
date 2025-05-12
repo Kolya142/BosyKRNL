@@ -1,3 +1,4 @@
+#pragma once
 #include <kernel.h>
 
 void outb(uint16_t port, uint8_t data);
@@ -6,3 +7,5 @@ void outw(uint16_t port, uint16_t data);
 uint16_t inw(uint16_t port);
 void outd(uint16_t port, uint32_t data);
 uint32_t ind(uint16_t port);
+
+void cpu_init();

@@ -4,7 +4,7 @@ static int readoct(const char *s, int fw) {
     int n = 0;
     for (int i = 0; i < fw && s[i]; ++i) {
 	char c = s[i];
-	if (c >= '0' && '7' <= c) {
+	if (c >= '0' && '7' >= c) {
 	    n = n * 8 + (c - '0');
 	}
     }

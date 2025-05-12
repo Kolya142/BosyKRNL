@@ -1,3 +1,6 @@
+#include <arch/x86/cpu/gdt.h>
+#include <arch/x86/cpu/idt.h>
+#include <arch/x86/cpu/pic.h>
 #include <arch/x86/x86.h>
 
 void outb(uint16_t port, uint8_t data) {
@@ -23,4 +26,10 @@ uint32_t ind(uint16_t port) {
     uint32_t ret;
     __asm__ __volatile__("in %1, %0" : "=a"(ret) : "Nd"(port));
     return ret;
+}
+
+void cpu_init() {
+    gdt_init();
+    idt_init();
+    pic_set();
 }
