@@ -16,3 +16,11 @@ void kmemset(void *dst, uint8_t val, uintarch_t len) {
 		 "c"(len), "a"(val), "D"(dst) : "memory");
 #endif
 }
+
+int kstrcmp(const char *a, const char *b) {
+    while (*a && *b) {
+	++a;
+	++b;
+    }
+    return *a - *b;
+}
