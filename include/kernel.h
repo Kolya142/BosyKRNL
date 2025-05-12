@@ -29,4 +29,5 @@ typedef uint64_t uintarch_t;
 void kmemcpy(void *dst, void *src, uintarch_t len);
 void kmemset(void *dst, uint8_t val, uintarch_t len);
 
+uintarch_t kstrlen(const char *s);
 int kstrcmp(const char *a, const char *b);

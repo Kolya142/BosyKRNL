@@ -10,9 +10,9 @@ static uintarch_t read1(dev_t dev, FS_RW_ARGS) {
     count /= 512;
     uint32_t count1 = 0;
     while (count) {
-	uint32_t lba = cursor1 * 512;
+        uint32_t lba = cursor1;
 	outb(0x01F6, 0xE0 | ((lba >> 24) & 15));
-	outb(0x01F2, count);
+	outb(0x01F2, 1);
 	outb(0x01F3, lba & 0xFF);
 	outb(0x01F4, ((lba >> 8)) & 0xFF);
 	outb(0x01F5, ((lba >> 16)) & 0xFF);
@@ -33,7 +33,7 @@ static uintarch_t read1(dev_t dev, FS_RW_ARGS) {
 	}
 
 	for (uint32_t i = 0; i < 256; ++i) {
-	    uint16_t word = inb(0x01F0);
+	    uint16_t word = inw(0x01F0);
             buf8[i * 2] = word & 0xff;
             buf8[i * 2 + 1] = (word >> 8) & 0xff;
 	}

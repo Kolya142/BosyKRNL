@@ -24,3 +24,9 @@ int kstrcmp(const char *a, const char *b) {
     }
     return *a - *b;
 }
+
+uintarch_t kstrlen(const char *s) {
+    uintarch_t a = 0;
+    while (*s) {++s; ++a;}
+    return a;
+}

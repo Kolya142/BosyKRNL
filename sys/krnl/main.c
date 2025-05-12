@@ -1,3 +1,4 @@
+#include <fs/iso9660.h>
 #include <fs/tarfs.h>
 #include <krnl/elf.h>
 #include <kernel.h>
@@ -21,15 +22,19 @@ void _start() {
     #endif
     int t = 0;
 
-    // tarfs_header_t *my_elf = tarfs_find_file("init", tar);
+    char tar[8192];
+    dev_t d = 1;
+    iso9660_dir_entry_t *de = iso9660_get(mods[1], &d, "distro.tar");
+    mods[1]->ioctl(1, 0, IO_CURSET, de->extent_lba_le * 2048, 0, 0, 0);
+    mods[1]->read(1, 0, tar, de->data_length_le * 2048);
+    tarfs_header_t *my_elf = tarfs_find_file("init", tar);
     
     for(;;) {
 	mods[0]->ioctl(0, 1, IO_CURSET, 0, 0, 0, 0);
 	char buf[1024];
-	mods[1]->ioctl(1, 0, IO_CURSET, 1024*16, 0, 0, 0);
 	mods[1]->read(1, 0, buf, 1024);
 	mods[0]->write(0, 1, buf, 1024);
 	++t;
-	// elf32_loader((void*)my_elf + 512);
+	elf32_loader((void*)my_elf + 512);
     }
 }
