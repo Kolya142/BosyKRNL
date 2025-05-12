@@ -20,7 +20,7 @@ static uintarch_t vga_write(dev_t dev, FS_RW_ARGS) {
     return i;
 }
 
-static uintarch_t vga_ioctl(dev_t dev, uintarch_t fd, uint32_t type, uintarch_t a, uintarch_t b, uintarch_t c, uintarch_t d) {
+static uintarch_t vga_ioctl(dev_t dev, uintarch_t fd, uint32_t type, uintarch_t a, uintarch_t, uintarch_t, uintarch_t) {
     if (type == IO_CURSET) {
 	c = a;
 	return 0;

@@ -9,7 +9,8 @@
 #define MOD_FLAGS_DISK (1 << 2)
 #define MOD_FLAGS_VIDEO (1 << 3)
 #define MOD_FLAGS_CHAROUT (1 << 4)
-#define MOD_FLAGS_OTHER (1 << 5)
+#define MOD_FLAGS_CONTROLLER (1 << 5)
+#define MOD_FLAGS_OTHER (1 << 6)
 
 #define EPERM 0
 #define ENOTSUP 1
