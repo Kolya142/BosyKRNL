@@ -5,10 +5,20 @@
 [ ] replace grub with a non-gpl boot loader
 [P] make BBB(Boot Binary Blob)
 [ ] self-host bosykrnl-based os
+[ ] minix v1-v3 fs
+[ ] vfs
 [ ] ext2 fs
-[ ] aarch64, arm32, riscv64 and amd64 support
-[ ] POSIX-like user-land
-[ ] elf loader
+[x] ustar fs
+[P] iso9660 fs
+[ ] i386's apic
+[ ] aarch64(qemu), arm32(qemu), riscv64 and amd64(uefi) support
+[ ] POSIX-like userland
+[x] elf loader for static programs
+[ ] elf loader for dynamic kernel modules
+[ ] elf loader for dynamic libs
 [ ] usb hid support
 [ ] pci support
 [ ] readable readme.md
+[ ] {clang; ld.lld; ash; editor} in bosykrnl-based os
+[ ] framebuffer
+[ ] audio

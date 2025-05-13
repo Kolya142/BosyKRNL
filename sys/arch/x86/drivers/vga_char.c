@@ -13,7 +13,7 @@ static uintarch_t vga_write(dev_t dev, FS_RW_ARGS) {
     char *cbuf = buf;
     uintarch_t i;
     for (i = 0; i < count; ++i) {
-	((short*)0xB8000)[c] = ((fg | (bg << 4)) << 8) | cbuf[i];
+      ((short*)0xB8000)[c] = ((fg | (bg << 4)) << 8) | (uint8_t)cbuf[i];
 	if (c >= 80*25) break;
 	++c;
     }

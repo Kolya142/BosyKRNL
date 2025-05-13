@@ -11,10 +11,19 @@
 
 static mod_t *mods[512] = {0};
 
+void main();
+
+__attribute__((naked))
 void _start() {
-    cpu_init();
     #if ARCH == ARCH_I386
     asm("mov $0x200000, %esp");
+    #endif
+    asm("call main");
+}
+
+void main() {
+    #if ARCH == ARCH_I386
+    cpu_init();
     mod_vga_char.load(0);
     mod_ata_drive1.load(1);
     mods[0] = &mod_vga_char;
@@ -31,10 +40,8 @@ void _start() {
     
     for(;;) {
 	mods[0]->ioctl(0, 1, IO_CURSET, 0, 0, 0, 0);
-	char buf[1024];
-	mods[1]->read(1, 0, buf, 1024);
-	mods[0]->write(0, 1, buf, 1024);
+	mods[0]->write(0, 1, (void *)0x100000 + t, 1024);
 	++t;
-	elf32_loader((void*)my_elf + 512);
+	elf32_loader((void *)my_elf + 512);
     }
 }
