@@ -9,7 +9,7 @@
 #define ARCH_RISCV64 5
 
 #if !defined(ARCH)
-#define ARCH ARCH_AARCH64
+#define ARCH ARCH_I386
 #endif
 
 #if ARCH == ARCH_I386
