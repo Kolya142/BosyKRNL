@@ -30,3 +30,5 @@ typedef struct tarfs_header {
 
 
 tarfs_header_t *tarfs_find_file(const char *fn, void *tarfs);
+
+extern afs_t tarfs;

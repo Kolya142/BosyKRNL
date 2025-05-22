@@ -1,4 +1,6 @@
+#include "mod.h"
 #include <krnl/elf.h>
+#include <krnl/memory.h>
 
 int elf32_loader(uint8_t *prog) {
     elf32head_t *elf = (elf32head_t *)prog;
@@ -8,13 +10,14 @@ int elf32_loader(uint8_t *prog) {
     if (elf->e_arch != 1 || elf->e_machine != 3) {
         return 2;
     }
-
     elf32prog_t *ph = (elf32prog_t*)(prog + elf->e_phoff);
     for (uint32_t i = 0; i < elf->e_phnum; ++i, ++ph) {
 	if (ph->e_type != 1) continue;
-
+	
 	for (uint32_t off = 0; off < ph->e_memsz; off += 0x1000) {
 	    void *poff = (void*)ph->e_vaddr + off;
+	    uintarch_t page = paging.alloc_page();
+	    paging.map_page(page, (uintarch_t)poff, paging.get_hardware_flags(MEMDEV_READ|MEMDEV_USER|MEMDEV_WRITE|MEMDEV_PRESENT));
 
 	    if (off < ph->e_filesz) {
 		uint32_t len = 0x1000;

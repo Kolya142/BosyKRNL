@@ -3,13 +3,13 @@
 
 static uint32_t c, fg, bg;
 
-static void vga_load(dev_t dev) {
+static void vga_load(dev_t *dev) {
     c = 0;
     fg = 0x0F;
     bg = 0x00;
 }
 
-static uintarch_t vga_write(dev_t dev, FS_RW_ARGS) {
+static uintarch_t vga_write(dev_t *dev, FS_RW_ARGS) {
     char *cbuf = buf;
     uintarch_t i;
     for (i = 0; i < count; ++i) {
@@ -20,7 +20,7 @@ static uintarch_t vga_write(dev_t dev, FS_RW_ARGS) {
     return i;
 }
 
-static uintarch_t vga_ioctl(dev_t dev, uintarch_t fd, uint32_t type, uintarch_t a, uintarch_t, uintarch_t, uintarch_t) {
+static uintarch_t vga_ioctl(dev_t *dev, uintarch_t fd, uint32_t type, uintarch_t a, uintarch_t, uintarch_t, uintarch_t) {
     if (type == IO_CURSET) {
 	c = a;
 	return 0;

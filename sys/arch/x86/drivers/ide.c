@@ -5,7 +5,7 @@
 static uintarch_t cursor1 = 0;
 
 static void init1() {}
-static uintarch_t read1(dev_t dev, FS_RW_ARGS) {
+static uintarch_t read1(dev_t *dev, FS_RW_ARGS) {
     if (count % 512 != 0) return 0;
     count /= 512;
     uint32_t count1 = 0;
@@ -46,7 +46,7 @@ static uintarch_t read1(dev_t dev, FS_RW_ARGS) {
     return count1 * 512;
 }
 
-static uintarch_t ioctl(dev_t dev, uintarch_t fd, uint32_t type, uintarch_t a, uintarch_t b, uintarch_t c, uintarch_t d) {
+static uintarch_t ioctl(dev_t *dev, uintarch_t fd, uint32_t type, uintarch_t a, uintarch_t b, uintarch_t c, uintarch_t d) {
     if (type == IO_CURSET) {
 	cursor1 = a / 512;
 	return 0;

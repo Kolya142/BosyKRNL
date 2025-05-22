@@ -18,4 +18,6 @@ typedef struct iso9660_dir_entry {
     char name[];
 } __attribute__((packed)) iso9660_dir_entry_t;
 
-iso9660_dir_entry_t *iso9660_get(mod_t *drive, dev_t *dev, const char *name);    
+iso9660_dir_entry_t *iso9660_get(mod_t *drive, dev_t *dev, const char *name);
+
+extern afs_t iso9660fs;

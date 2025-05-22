@@ -26,8 +26,13 @@ typedef uint64_t uintarch_t;
 #define FALSE 0
 #define TRUE 1
 
+typedef uint8_t byte_t;
+
 void kmemcpy(void *dst, void *src, uintarch_t len);
 void kmemset(void *dst, uint8_t val, uintarch_t len);
 
-uintarch_t kstrlen(const char *s);
 int kstrcmp(const char *a, const char *b);
+uintarch_t kstrlen(const char *s);
+
+int kputsa(const char *s);
+int kputha(uintarch_t d);

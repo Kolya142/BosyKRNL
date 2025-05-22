@@ -15,7 +15,7 @@ proot = Path(".").resolve()
 arch = sys.argv[1]
 bits = sys.argv[2]
 
-cc = ["clang", "-static", "-target", f"{arch}-none-none", "-I../include", "-ffreestanding", "-nostdlib", f"-m{bits}", f"-DARCH=ARCH_{arch.upper()}", "-c"]
+cc = ["clang", "-static", "-target", f"{arch}-none-none", "-I../include", "-ffreestanding", "-nostdlib", "-fno-builtin", f"-m{bits}", f"-DARCH=ARCH_{arch.upper()}", "-c"]
 
 tasks = []
 for root, _, files in os.walk(proot):

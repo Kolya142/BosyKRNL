@@ -1,3 +1,4 @@
+#include <arch/x86/cpu/paging.h>
 #include <arch/x86/cpu/gdt.h>
 #include <arch/x86/cpu/idt.h>
 #include <arch/x86/cpu/pic.h>
@@ -32,4 +33,5 @@ void cpu_init() {
     gdt_init();
     idt_init();
     pic_set();
+    init_paging();
 }

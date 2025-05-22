@@ -33,7 +33,7 @@ static void ps2_load() {
     outb(0x64, 0xAE);
     if (status & 0x20) outb(0x64, 0xAB);
 }
-static uintarch_t ps2_ioctl(dev_t dev, uintarch_t fd, uint32_t type, uintarch_t a, uintarch_t b, uintarch_t c, uintarch_t d) {
+static uintarch_t ps2_ioctl(dev_t *dev, uintarch_t fd, uint32_t type, uintarch_t a, uintarch_t b, uintarch_t c, uintarch_t d) {
     switch (type) {
     case CTIO_RESET: {
 	ps2_load();

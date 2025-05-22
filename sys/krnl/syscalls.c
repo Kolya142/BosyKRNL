@@ -5,8 +5,9 @@
 
 static INT_DEF(syscall_handler) {
     switch (regs->eax) {
-    case 0:
-	
+    case 0: {
+	    kputsa((char *)regs->ebx);
+    }
     }
 }
 
