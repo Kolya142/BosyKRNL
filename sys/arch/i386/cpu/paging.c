@@ -14,18 +14,19 @@ static uintarch_t get_hardware_flags(uintarch_t krnlflags) {
     return flags;
 }
 
-static volatile uint32_t pd[1024] __attribute__((used)) __attribute__((aligned(4096)));
-static volatile uint32_t pt[1024*4096] __attribute__((used)) __attribute__((aligned(4096)));
+static __HARDWARE uint32_t pd[1024] __attribute__((used)) __ALIGN(4096);
+static __HARDWARE uint32_t pt[1024*1024] __attribute__((used)) __ALIGN(4096);
 
-volatile void init_paging() {
+void init_paging() {
+    // TODO: don't allow user to access all memory
     for (uint32_t i = 0; i < 1024*1024; ++i) {
-	pt[i] = (i * 4096) | 3;
+	pt[i] = (i * 4096) | 7;
     }
     for (uint32_t i = 0; i < 1024; ++i) {
-	pd[i] = ((uint32_t)&pt[i * 1024]) | 3;
+        pd[i] = ((uint32_t)&pt[i * 1024]) | 7;
     }
 
-    asm volatile (
+    asm __HARDWARE (
 	"mov %0, %%eax\n"
 	"mov %%eax, %%cr3\n"
 
@@ -38,7 +39,7 @@ volatile void init_paging() {
 }
 
 static void invlpg(uint32_t page) {
-    asm volatile (
+    asm __HARDWARE (
 	"mov %0, %%eax\n"
 	"invlpg (%%eax)"
 	:: "r"(page)
@@ -64,7 +65,6 @@ static uintarch_t alloc_page() {
 	    uint32_t k = i * 8 + j;
 	    pat[i] |= 1 << j;
 	    return 1024*1024*1024 + k * 4096;
-	    break;
 	}
     }
     return NULL;

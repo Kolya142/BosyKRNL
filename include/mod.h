@@ -1,5 +1,6 @@
 #pragma once
 #include <kernel.h>
+#include <errno.h>
 
 #define MOD_CAUSE_SYSTEM_FINISH 0
 #define MOD_CAUSE_CPU_ERROR 1
@@ -11,12 +12,8 @@
 #define MOD_FLAGS_CHAROUT (1 << 4)
 #define MOD_FLAGS_CONTROLLER (1 << 5)
 #define MOD_FLAGS_DEBUGONLY (1 << 6)
-#define MOD_FLAGS_OTHER (1 << 7)
-
-#define EPERM -1
-#define ENOTSUP -2
-#define ENOSYS -3
-#define EINVAL -4
+#define MOD_FLAGS_TTY (1 << 7)
+#define MOD_FLAGS_OTHER (1 << 8)
 
 #define IO_CURSET 0
 
@@ -25,6 +22,10 @@ typedef struct dev {
     void *data;
     uintarch_t id;
 } dev_t;
+
+struct stat {
+    uintarch_t size;
+};
 
 #define FS_RW_ARGS uintarch_t fd, void *buf, uintarch_t count
 
@@ -46,6 +47,7 @@ typedef struct afs {
     uintarch_t(*read)(dev_t *dev, mod_t *drive, uintarch_t offset, const char *name, void *buf, uintarch_t count);
     uintarch_t(*write)(dev_t *dev, mod_t *drive, uintarch_t offset, const char *name, void *buf, uintarch_t count);
     uintarch_t(*ioctl)(dev_t *dev, mod_t *drive, uintarch_t fd, uint32_t type, uintarch_t a, uintarch_t b, uintarch_t c, uintarch_t d);
+    bool(*stat)(dev_t *dev, mod_t *drive, const char *name, struct stat *);
 } afs_t;
 
 #define MEMDEV_READ 1
@@ -62,8 +64,8 @@ typedef struct memorydev {
     uintarch_t(*map_page)(uintarch_t real, uintarch_t virt, uintarch_t flags);
 } memorydev_t;
 
-#define MODSC 512
-#define DEVSC 512
+#define MODSC 16
+#define DEVSC 16
 
 extern mod_t *mods[MODSC];
 extern dev_t devs[DEVSC];

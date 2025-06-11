@@ -1,3 +1,4 @@
+/*
 #include <fs/tarfs.h>
 
 static int readoct(const char *s, int fw) {
@@ -25,3 +26,4 @@ tarfs_header_t *tarfs_find_file(const char *fn, void *tarfs) {
     }
     return NULL;
 }
+*/

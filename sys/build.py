@@ -17,11 +17,17 @@ bits = sys.argv[2]
 
 cc = ["clang", "-static", "-target", f"{arch}-none-none", "-I../include", "-ffreestanding", "-nostdlib", "-fno-builtin", f"-m{bits}", f"-DARCH=ARCH_{arch.upper()}", "-c"]
 
+if arch == 'riscv64':
+    cc += ["-mcmodel=medany"]
+
 tasks = []
 for root, _, files in os.walk(proot):
     for f in files:
+        if "/arch/" in root and arch.lower() not in root:
+            break
         if f.endswith(".o"):
             break
+        print(root)
         source = Path(root) / f
         output = Path(proot) / "build" / (f + '.o')
         if f.endswith(".c"):
@@ -29,7 +35,7 @@ for root, _, files in os.walk(proot):
         elif f.endswith(".zxq"):
             tasks.append(["bash", "-c", f"python3 ~/zxaqnop/compiler.py {source} > {output}.c && {' '.join(cc)} {output}.c -o {output}"])
         elif f.endswith(".s"):
-            tasks.append(["nasm", "-f", f"elf{bits}", str(source), "-o", str(output)])
+            tasks.append([*cc, str(source), "-o", str(output)])
 
 run(["rm", "-rf", "build"])
 run(["mkdir", "-p", "build"])
