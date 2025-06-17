@@ -1,4 +1,4 @@
-#include <arch/x86/cpu/pic.h>
+#include <bosykrnl/arch/x86/cpu/pic.h>
 
 void pic_set() {
     outb(0x20, 0x11);

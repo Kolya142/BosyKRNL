@@ -1,6 +1,6 @@
-#include "kernel.h"
-#include "mod.h"
-#include <arch/x86/drivers/ide.h>
+#include <bosykrnl/kernel.h>
+#include <bosykrnl/mod.h>
+#include <bosykrnl/arch/x86/drivers/ide.h>
 
 static uintarch_t cursor1 = 0;
 static uintarch_t cursor1_offset = 0;

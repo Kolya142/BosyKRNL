@@ -1,4 +1,4 @@
-#include <arch/x86/cpu/gdt.h>
+#include <bosykrnl/arch/x86/cpu/gdt.h>
 
 tss_t tss;
 

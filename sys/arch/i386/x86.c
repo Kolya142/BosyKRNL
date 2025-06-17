@@ -1,8 +1,9 @@
-#include <arch/x86/cpu/paging.h>
-#include <arch/x86/cpu/gdt.h>
-#include <arch/x86/cpu/idt.h>
-#include <arch/x86/cpu/pic.h>
-#include <arch/x86/x86.h>
+#include <bosykrnl/arch/x86/cpu/paging.h>
+#include <bosykrnl/arch/x86/cpu/gdt.h>
+#include <bosykrnl/arch/x86/cpu/idt.h>
+#include <bosykrnl/arch/x86/cpu/pic.h>
+#include <bosykrnl/arch/x86/cpu/pit.h>
+#include <bosykrnl/arch/x86/x86.h>
 
 void outb(uint16_t port, uint8_t data) {
     __asm__ __volatile__("outb %0, %1" : : "a"(data), "Nd"(port));
@@ -33,5 +34,6 @@ void cpu_init() {
     gdt_init();
     idt_init();
     pic_set();
+    pit_init();
     init_paging();
 }

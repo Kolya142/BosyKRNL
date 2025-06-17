@@ -1,6 +1,6 @@
-#include <arch/x86/x86.h>
-#include <arch/x86/drivers/ps2.h>
-#include <arch/x86/cpu/pit.h>
+#include <bosykrnl/arch/x86/x86.h>
+#include <bosykrnl/arch/x86/drivers/ps2.h>
+#include <bosykrnl/arch/x86/cpu/pit.h>
 
 static void ps2_flush() {
     while (inb(0x64) & 1) inb(0x60);

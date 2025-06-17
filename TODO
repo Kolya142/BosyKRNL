@@ -7,7 +7,7 @@
 [ ] minix v1-v3 fs
 [ ] vfs
 [ ] ext2 fs
-[x] ustar fs
+[P] ustar fs
 [P] iso9660 fs
 [ ] i386's apic
 [P] aarch64(qemu), arm32(qemu), riscv64(qemu) and amd64(uefi) support

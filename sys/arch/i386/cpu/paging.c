@@ -1,4 +1,4 @@
-#include <mod.h>
+#include <bosykrnl/mod.h>
 
 static uintarch_t get_hardware_flags(uintarch_t krnlflags) {
     uintarch_t flags = 0;

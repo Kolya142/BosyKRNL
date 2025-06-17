@@ -1,8 +1,8 @@
-#include <krnl/syscalls.h>
-#include <dev/keyboard.h>
+#include <bosykrnl/krnl/syscalls.h>
+#include <bosykrnl/dev/keyboard.h>
 #include <errno.h>
 #if ARCH == ARCH_I386
-#include <arch/x86/cpu/idt.h>
+#include <bosykrnl/arch/x86/cpu/idt.h>
 #endif
 
 static INT_DEF(syscall_handler) {

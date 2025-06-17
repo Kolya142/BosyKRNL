@@ -1,7 +1,9 @@
 #include <tools/vector.h>
-#include <kernel.h>
+#include <bosykrnl/kernel.h>
 
 vector_t vector_init(uintarch_t size) {
+    kputsa("Vector: ");
+    kputha(size);
     vector_t vec = {
 	.arr = kmalloc(size),
 	.count = 0,
@@ -19,6 +21,7 @@ void vector_push_back(vector_t *this, void *item) {
 	this->arr = arr;
 	this->cap = cap;
     }
+    ++this->count;
     kmemcpy(this->arr + (this->count * this->size), item, this->size);
 }
 void vector_pop(vector_t *this) {
@@ -28,6 +31,6 @@ void *vector_get(vector_t *this, uintarch_t index) {
     return this->arr + (index * this->size);
 }
 void vector_destroy(vector_t *this) {
-    kfree(this->arr);
-    kfree(this);
+    if (this->arr) kfree(this->arr);
+    this->arr = NULL;
 }

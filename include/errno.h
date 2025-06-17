@@ -1,4 +1,4 @@
-#pragma oncex
+#pragma once
 
 extern int errno;
 

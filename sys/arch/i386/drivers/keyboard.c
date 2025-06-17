@@ -1,4 +1,4 @@
-#include <arch/x86/drivers/keyboard.h>
+#include <bosykrnl/arch/x86/drivers/keyboard.h>
 
 volatile keyboarddev_t keyboard;
 

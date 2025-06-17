@@ -18,4 +18,4 @@ cp krnl iso/iso/boot/grub/krnl
 
 grub2-mkrescue iso/iso -o iso/bootable.iso
 
-qemu-system-i386 iso/bootable.iso -m 2048M -vga virtio
+qemu-system-i386 iso/bootable.iso -m 2048M -vga virtio -display sdl

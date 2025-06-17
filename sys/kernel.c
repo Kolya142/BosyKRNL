@@ -1,5 +1,7 @@
-#include "kernel.h"
-#include <mod.h>
+#include <bosykrnl/kernel.h>
+#include <bosykrnl/mod.h>
+
+bool can_tasking = FALSE;
 
 void kmemcpy(void *dst, void *src, uintarch_t len){
 #if (ARCH == ARCH_I386) || (ARCH == ARCH_AMD64)

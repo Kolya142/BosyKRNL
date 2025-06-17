@@ -1,6 +1,6 @@
-#include "kernel.h"
-#include "mod.h"
-#include <fs/iso9660.h>
+#include <bosykrnl/kernel.h>
+#include <bosykrnl/mod.h>
+#include <bosykrnl/fs/iso9660.h>
 
 // FIXME
 
@@ -44,19 +44,17 @@ static uintarch_t read(dev_t *dev, mod_t *drive, uintarch_t offset, const char *
     iso9660_dir_entry_t *dep = iso9660_get(drive, dev, name);
     if (!dep) return 0;
     iso9660_dir_entry_t de = *dep;
-    uintarch_t dlle = de.data_length_le * 2048;
+    uintarch_t dlle = de.data_length_le;
     if (dlle <= offset) return 0;
-    byte_t *dbuf = kmalloc(count);
-    drive->ioctl(dev, 0, IO_CURSET, de.extent_lba_le * 2048, 0, 0, 0);
+    byte_t *dbuf = buf;
+    drive->ioctl(dev, 0, IO_CURSET, de.extent_lba_le * 2048 + offset, 0, 0, 0);
     drive->read(dev, 0, dbuf, count);
 
-    kmemcpy(buf, dbuf + offset, count - offset);
-    kfree(dbuf);
     return count - offset;
 }
 
 static bool stat(dev_t *dev, mod_t *drive, const char *name, struct stat *_stat) {
-    if (!stat) return FALSE;
+    if (!_stat) return FALSE;
     
     iso9660_dir_entry_t *dep = iso9660_get(drive, dev, name);
     if (!dep) return FALSE;

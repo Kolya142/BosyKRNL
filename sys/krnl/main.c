@@ -1,20 +1,22 @@
-#include <krnl/shred.h>
-#include <fs/iso9660.h>
-#include <fs/tarfs.h>
-#include <krnl/elf.h>
-#include <kernel.h>
-#include <mod.h>
+#include "bosykrnl/dev/keyboard.h"
+#include <bosykrnl/arch/intf/userland.h>
+#include <bosykrnl/krnl/shred.h>
+#include <bosykrnl/fs/iso9660.h>
+#include <bosykrnl/fs/tarfs.h>
+#include <bosykrnl/krnl/elf.h>
+#include <bosykrnl/kernel.h>
+#include <bosykrnl/mod.h>
 #if ARCH == ARCH_RISCV64
-#include <arch/riscv64/drivers/uart.h>
-#include <arch/riscv64/riscv64.h>
+#include <bosykrnl/arch/riscv64/drivers/uart.h>
+#include <bosykrnl/arch/riscv64/riscv64.h>
 #endif
 #if ARCH == ARCH_I386
-#include <arch/x86/drivers/keyboard.h>
-#include <arch/x86/drivers/vga_char.h>
-#include <arch/x86/drivers/ide.h>
-#include <arch/x86/cpu/paging.h>
-#include <krnl/syscalls.h>
-#include <arch/x86/x86.h>
+#include <bosykrnl/arch/x86/drivers/keyboard.h>
+#include <bosykrnl/arch/x86/drivers/vga_char.h>
+#include <bosykrnl/arch/x86/drivers/ide.h>
+#include <bosykrnl/arch/x86/cpu/paging.h>
+#include <bosykrnl/krnl/syscalls.h>
+#include <bosykrnl/arch/x86/x86.h>
 #endif
 
 void main();
@@ -32,27 +34,53 @@ void _start() {
     asm("call main");
 #endif
 /*
-/*
 #if ARCH == ARCH_RISCV64
-    asm("li sp, 0x80200000");
+asm("li sp, 0x80200000");
 #endif
 */
 #if ARCH == ARCH_MIPS64EL
     asm(
 	"lui $sp, 0xcfc0\n"
 	"jal main"
-    );
+	);
 #endif
+}
+static void debug_print(const char *s) {
+    asm __HARDWARE (
+	"xor %%eax, %%eax\n"
+	"mov %0, %%ebx\n"
+	"int $0x80"
+	:: "r"(s)
+	: "eax", "ebx"
+    );
+}
+
+// FIXME: kernel tasks
+static void my_task() {
+    debug_print("my_task\n");
+    for(;;) {
+	if (keyboard.key == 0x1B) {
+	    debug_print("asd");
+	}
+    }
+}
+
+static void user_start() {
+    debug_print("user_start\n");
+    
+    can_tasking = TRUE;
+
+    for(;;);
 }
 
 struct multiboot {
-	uint32_t total;
-	uint32_t reservd;
+    uint32_t total;
+    uint32_t reservd;
 } __attribute__((packed));
 
 struct multiboot_tag {
-	uint32_t type;
-	uint32_t size;
+    uint32_t type;
+    uint32_t size;
 } __attribute__((packed));
 
 void main(struct MultiBoot *mb) {
@@ -110,18 +138,24 @@ void main(struct MultiBoot *mb) {
     task_init();
     syscalls_init();
     int t = 0;
-
+    
     struct stat elf_stat;
     if (!iso9660fs.stat(&devs[1], mods[1], "init", &elf_stat)) {
 	kputsa("\n\nkpanic: INIT not found at iso9660:/init");
 	for(;;);
     }
+    
     byte_t *elf = kmalloc(elf_stat.size);
-    iso9660fs.read(&devs[1], mods[1], 0, "init", elf, 1024*16);
-
+    // kputha((uintptr_t)elf);
+    iso9660fs.read(&devs[1], mods[1], 0, "init", elf, elf_stat.size);
+    
     elf32_loader(elf);
 
     kfree(elf);
+    
+    task_create(my_task, kmalloc(16*1024)+16*1024-16, /*0x10, 0x08*/ 0x23, 0x1B, TRUE);
+
+    SWITCH_TO_USERLAND((uintptr_t)user_start, (uintptr_t)kmalloc(16*1024)+16*1024-1);
     
     kputsa("\nHALTING");
     for(;;);

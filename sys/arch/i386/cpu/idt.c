@@ -1,4 +1,4 @@
-#include <arch/x86/cpu/idt.h>
+#include <bosykrnl/arch/x86/cpu/idt.h>
 
 INT_DEF(idt_nothing) {
 }

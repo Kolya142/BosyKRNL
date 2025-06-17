@@ -1,5 +1,5 @@
-#include <arch/x86/drivers/vga_char.h>
-#include <arch/x86/x86.h>
+#include <bosykrnl/arch/x86/drivers/vga_char.h>
+#include <bosykrnl/arch/x86/x86.h>
 
 static uint32_t c, fg, bg;
 
@@ -34,17 +34,25 @@ static uintarch_t vga_write(dev_t *dev, FS_RW_ARGS) {
 	}
 	else if (cbuf[i] == '\x1b') {
 	    ++i;
-	    int num = 0;
+	    int nums[10];
+	    kmemset(nums, 0, sizeof(nums));
+	    int numi = 0;
 	    if (cbuf[i] == '[') {
 		++i;
-		while (cbuf[i] >= '0' && cbuf[i] <= '9') {
-		    num *= 10;
-		    num += cbuf[i] - '0';
-		    ++i;
-		}
+		do {
+		    while (cbuf[i] >= '0' && cbuf[i] <= '9') {
+			nums[numi] *= 10;
+			nums[numi] += cbuf[i] - '0';
+			++i;
+		    }
+		    if (cbuf[i] == ';') {
+			++i;
+			++numi;
+		    }
+		} while (cbuf[i] == ';');
 		switch (cbuf[i]) {
 		case 'J': {
-		    if (num == 2) {
+		    if (nums[0] == 2) {
 			for (uint32_t j = 0; j < 80 * 25; ++j) {
 			    ((short*)0xB8000)[j] = 0;
 			}
@@ -52,12 +60,14 @@ static uintarch_t vga_write(dev_t *dev, FS_RW_ARGS) {
 		    break;
 		}
 		case 'H': {
-		    c = 0;
+		    if (!nums[0]) nums[0] = 1;
+		    if (!nums[1]) nums[1] = 1;
+		    c = (nums[0]-1)+80*(nums[1]-1);
 		    break;
 		}
 		case 'K': {
 		    for (uint32_t j = c; j < c + (80 - (c % 80)); ++j) {
-			    ((short*)0xB8000)[j] = 0;
+			((short*)0xB8000)[j] = 0;
 		    }
 		    break;
 		}

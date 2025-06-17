@@ -19,7 +19,18 @@ int entry(int argc, char **argv, char **environ, char *ver) {
 			buf[bufi] = 0;
 			bufi = 0;
 			if (!strcmp(buf, "help")) {
-			    debug_print("help clear echo\n");
+			    debug_print("help clear echo demo\n");
+			}
+			else if (!strcmp(buf, "demo")) {
+			    char c = 0;
+			    int a = 0;
+			    int b = 0xA938B4F;
+			    for (int i = 0; i < 256; ++i) {
+				b += a * 0xF0AD83 + b - 0xAB20;
+				c += a - b;
+				--a;
+				debug_print((char[]) {c, a, b, 0});
+			    }
 			}
 			else if (!strcmp(buf, "clear")) {
 			    debug_print("\x1b[2J\x1b[H");
