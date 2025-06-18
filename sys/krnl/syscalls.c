@@ -40,10 +40,9 @@ static INT_DEF(syscall_handler) {
 	break;
     }
     case 3: {
-	task_curr->state = TASK_DEAD;
 	task_kill(task_curr->id);
 
-	regs->eax = 0;
+	// Unreachable in userland
 	break;
     }
     case 4: {
@@ -52,6 +51,8 @@ static INT_DEF(syscall_handler) {
     }
     case 5: {
 	task_curr->priority = regs->ebx;
+
+	regs->eax = 0;
 	break;
     }
     }

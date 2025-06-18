@@ -153,7 +153,7 @@ void main(struct MultiBoot *mb) {
 
     kfree(elf);
     
-    task_create(my_task, kmalloc(16*1024)+16*1024-16, /*0x10, 0x08*/ 0x23, 0x1B, TRUE);
+    task_create(my_task, kmalloc(16*1024)+16*1024-16, /*0x10, 0x08*/ 0x23, 0x1B, FALSE);
 
     SWITCH_TO_USERLAND((uintptr_t)user_start, (uintptr_t)kmalloc(16*1024)+16*1024-1);
     
