@@ -11,8 +11,10 @@ clang -m$BITS -target $ARCH lib/crt0.c -o lib/crt0.o -static -c -nostdlib -I./in
 clang -m$BITS -target $ARCH lib/io.c -o lib/io.o -static -c -nostdlib -I./include
 clang -m$BITS -target $ARCH lib/errno.c -o lib/errno.o -static -c -nostdlib -I./include
 clang -m$BITS -target $ARCH sbin/init.c lib/*.o -o sbin/init -static -nostdlib -I./include
+clang -m$BITS -target $ARCH sbin/demo.c lib/*.o -o sbin/demo -static -nostdlib -I./include
 
 cp sbin/init iso/iso/init
+cp sbin/demo iso/iso/demo
 
 cp krnl iso/iso/boot/grub/krnl
 

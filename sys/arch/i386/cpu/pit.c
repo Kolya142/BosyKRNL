@@ -24,22 +24,32 @@ static void map_pages(task_t *task) {
 static INT_DEF(pit_irq_handler) {
     ++pit_ticks;
     if (task_first && can_tasking) {
-	if (task_curr->state != TASK_READY) {
-	    if (regs->ds & 3)
-		kmemcpy(&task_curr->regs, regs, sizeof(regs_t));
+	if (task_curr->state == TASK_DEAD) {
+	    task_next();
+	    if (!task_curr->is_kernel)
+		kmemcpy(regs, &task_curr->regs, sizeof(regs_t));
 	    else
-		kmemcpy(&task_curr->regs, regs, sizeof(regs_kernel_t));
+		kmemcpy(regs, &task_curr->regs, sizeof(regs_kernel_t));
+	    map_pages(task_curr);
 	}
 	else {
-	    // kputsa("ready!");
-	    task_curr->state = TASK_RUNNING;
+	    if (task_curr->state != TASK_READY) {
+		if (regs->ds & 3)
+		    kmemcpy(&task_curr->regs, regs, sizeof(regs_t));
+		else
+		    kmemcpy(&task_curr->regs, regs, sizeof(regs_kernel_t));
+	    }
+	    else {
+		// kputsa("ready!");
+		task_curr->state = TASK_RUNNING;
+	    }
+	    task_next();
+	    if(!task_curr->is_kernel)
+		kmemcpy(regs, &task_curr->regs, sizeof(regs_t));
+	    else
+		kmemcpy(regs, &task_curr->regs, sizeof(regs_kernel_t));
+	    map_pages(task_curr);
 	}
-	task_next();
-	if (task_curr->regs.ds & 3)
-	    kmemcpy(regs, &task_curr->regs, sizeof(regs_t));
-	else
-	    kmemcpy(regs, &task_curr->regs, sizeof(regs_kernel_t));
-	map_pages(task_curr);
     }
 }
 

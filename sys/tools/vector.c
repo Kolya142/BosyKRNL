@@ -2,8 +2,6 @@
 #include <bosykrnl/kernel.h>
 
 vector_t vector_init(uintarch_t size) {
-    kputsa("Vector: ");
-    kputha(size);
     vector_t vec = {
 	.arr = kmalloc(size),
 	.count = 0,
